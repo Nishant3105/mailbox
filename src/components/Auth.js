@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from 'axios'
 
 const SignUpForm = () => {
   const [form, setForm] = useState({
@@ -44,13 +45,22 @@ const SignUpForm = () => {
     setErrors(validate(form));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const validationErrors = validate(form);
-    setErrors(validationErrors);
-    if (Object.keys(validationErrors).length === 0) {
-      alert("Signed up successfully!");
-      console.log('user created successfully')
+  const handleSubmit = async (e) => {
+    try{
+        e.preventDefault();
+        const validationErrors = validate(form);
+        setErrors(validationErrors);
+        if (Object.keys(validationErrors).length === 0) {
+        //   alert("Signed up successfully!");
+
+          const res=await axios.post("http://localhost:3010/signin",{
+            email: form.email,
+            password: form.password,
+          });
+          console.log(res)
+        }
+    }catch(error){
+        console.log(error)
     }
   };
 
@@ -79,7 +89,6 @@ const SignUpForm = () => {
           )}
         </div>
 
-        {/* Password */}
         <div>
           <label className="block mb-1 font-medium">Password</label>
           <input
@@ -99,7 +108,6 @@ const SignUpForm = () => {
           )}
         </div>
 
-        {/* Confirm Password */}
         <div>
           <label className="block mb-1 font-medium">Confirm Password</label>
           <input
